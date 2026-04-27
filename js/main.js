@@ -1,14 +1,14 @@
 // Aos - the right initialisation
 jQuery(document).ready(function () {
-    (function () {
-        // your page initialization code here
-        // the DOM will be available here
-        AOS.init({
-            duration: 750,
-            offset: 0, // offset (in px) from the original trigger point
-            anchorPlacement: 'top-bottom', // define where the AOS animations will be triggered
-        });
-    })();
+  (function () {
+    // your page initialization code here
+    // the DOM will be available here
+    AOS.init({
+      duration: 750,
+      offset: 0, // offset (in px) from the original trigger point
+      anchorPlacement: "top-bottom", // define where the AOS animations will be triggered
+    });
+  })();
 });
 // //
 
@@ -180,6 +180,61 @@ $(function () {
       });
     }
   }
+
+  // // //
+
+  $(document).ready(function () {
+    var $popup = $(".popup");
+    var $popups = {
+      contact: $(".popup--contact"),
+    };
+
+    // Функция для показа попапа
+    function showPopup($popupToShow) {
+      $popupToShow.addClass("popup--active").fadeIn(250, function () {
+        $(this).animate({ opacity: 1 }, 250);
+      });
+      $("body").addClass("body--popup");
+    }
+
+    // Функция для скрытия попапа
+    function hidePopup($popupToHide) {
+      $popupToHide.removeClass("popup--active").fadeOut(250, function () {
+        $(this).animate({ opacity: 1 }, 250);
+      });
+      $("body").removeClass("body--popup");
+    }
+
+    $(".heading__titling-link, .funnel__link").click(function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+      showPopup($popups.contact);
+    });
+
+    // Обработчик кликов для скрытия попапов
+    $(".cls").click(function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+      hidePopup($popup);
+    });
+
+    // Скрываем попап при клике вне его области
+    $(document).click(function (event) {
+      $.each($popups, function (key, $popupToCheck) {
+        if ($popupToCheck.hasClass("popup--active")) {
+          var $popupInner = $popupToCheck.find(".popup__inner");
+          if (
+            !$popupInner.is(event.target) &&
+            $popupInner.has(event.target).length === 0
+          ) {
+            hidePopup($popupToCheck);
+          }
+        }
+      });
+    });
+  });
+
+  // // //
   // $('.header-top-lang').on('click', function (event) {
   //     $('.header-top-lang-content').toggleClass('header-top-lang-content--active');
   //     $(this).toggleClass('header-top-lang--active');
